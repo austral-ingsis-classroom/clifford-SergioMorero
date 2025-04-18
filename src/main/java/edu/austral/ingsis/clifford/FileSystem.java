@@ -88,7 +88,12 @@ public class FileSystem {
 
   public String touch(String[] parsedCommand){
     if (parsedCommand.length > 1){
-      return this.current.touch(parsedCommand[1]);
+      if (parsedCommand.length == 2){
+        return this.current.touch(parsedCommand[1]);
+      }
+      else{
+        return "File name cannot include spaces";
+      }
     }
     else {
       return "No file name provided";
@@ -97,7 +102,12 @@ public class FileSystem {
 
   public String mkdir(String[] parsedCommand){
     if (parsedCommand.length > 1){
-      return this.current.mkdir(parsedCommand[1]);
+      if (parsedCommand.length == 2){
+        return this.current.mkdir(parsedCommand[1]);
+      }
+      else {
+        return "Directory name cannot include spaces";
+      }
     }
     else {
       return "No directory name provided";

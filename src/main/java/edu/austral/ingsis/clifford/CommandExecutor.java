@@ -12,7 +12,7 @@ public class CommandExecutor{
 
   public String inputCommand(String input){
     if (!input.isEmpty()){
-      String[] parsed = input.split(input);
+      String[] parsed = input.split(" ");
       String command = parsed[0];
       return switch (command){
         case "ls" -> fileSystem.ls(parsed);
