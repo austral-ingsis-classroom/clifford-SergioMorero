@@ -19,8 +19,8 @@ public class CommandExecutor{
         case "cd" -> fileSystem.cd(parsed);
         case "touch" -> fileSystem.touch(parsed);
         case "mkdir" -> fileSystem.mkdir(parsed);
-        case "rm" ->null;
-        case "pwd" ->null;
+        case "rm" -> fileSystem.rm(parsed);
+        case "pwd" -> fileSystem.pwd();
         default -> "Command '" + command + "' does not exist";
       };
 

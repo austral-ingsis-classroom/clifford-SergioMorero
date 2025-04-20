@@ -1,5 +1,9 @@
 package edu.austral.ingsis.clifford;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class FileSystem {
 
   private final Directory root = new Directory("/", null);
@@ -111,6 +115,32 @@ public class FileSystem {
     }
     else {
       return "No directory name provided";
+    }
+  }
+
+  public String rm(String[] parsedCommand){
+    if (parsedCommand.length > 1){
+      return this.current.rm(parsedCommand);
+    }
+    else {
+      return "No file name provided";
+    }
+  }
+
+  public String pwd(){
+    List<String> list = new ArrayList<>();
+    List<String> path = recursivePwd(this.current, list);
+    Collections.reverse(path);
+    return "/" + String.join("/", path);
+  }
+
+  private List<String> recursivePwd(Directory current, List<String> result){
+    if (current.getName().equals("/")){
+      return result;
+    }
+    else {
+      result.add(current.getName());
+      return recursivePwd(current.getParent(), result);
     }
   }
 
