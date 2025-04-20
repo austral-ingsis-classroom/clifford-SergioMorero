@@ -10,20 +10,21 @@ public class CommandInitialTests {
   private CommandExecutor executor;
 
   @BeforeEach
-  public void setup(){
+  public void setup() {
     executor = new CommandExecutor();
   }
 
   @Test
-  public void createFileTest(){
+  public void createFileTest() {
     Assertions.assertEquals(executor.inputCommand("touch hola.txt"), "'hola.txt' file created");
     Assertions.assertEquals(executor.inputCommand("touch"), "No file name provided");
-    Assertions.assertEquals(executor.inputCommand("touch hola 2.txt"), "File name cannot include spaces");
+    Assertions.assertEquals(
+        executor.inputCommand("touch hola 2.txt"), "File name cannot include spaces");
     Assertions.assertEquals(executor.inputCommand("ls"), "hola.txt");
   }
 
   @Test
-  public void createDirectoryTest(){
+  public void createDirectoryTest() {
     Assertions.assertEquals(executor.inputCommand("mkdir saludos"), "'saludos' directory created");
     executor.inputCommand("touch hola.txt");
     Assertions.assertEquals(executor.inputCommand("ls --ord=asc"), "hola.txt saludos/");
@@ -34,22 +35,25 @@ public class CommandInitialTests {
   }
 
   @Test
-  public void removeTest(){
+  public void removeTest() {
     executor.inputCommand("touch hola.txt");
     executor.inputCommand("mkdir saludos");
     executor.inputCommand("mkdir saludo");
     executor.inputCommand("cd saludo");
     executor.inputCommand("touch aaa.txt");
-    Assertions.assertEquals(executor.inputCommand("rm aa.txt"), "File: 'aa.txt' does not exist in this directory");
+    Assertions.assertEquals(
+        executor.inputCommand("rm aa.txt"), "File: 'aa.txt' does not exist in this directory");
     Assertions.assertEquals(executor.inputCommand("rm aaa.txt"), "'aaa.txt' removed");
     Assertions.assertEquals(executor.inputCommand("ls"), "");
     executor.inputCommand("cd ..");
-    Assertions.assertEquals(executor.inputCommand("rm --recursive saludoss"), "Directory: 'saludoss' does not exist in this directory");
+    Assertions.assertEquals(
+        executor.inputCommand("rm --recursive saludoss"),
+        "Directory: 'saludoss' does not exist in this directory");
     Assertions.assertEquals(executor.inputCommand("rm --recursive saludo"), "'saludo' removed");
   }
 
   @Test
-  public void pwdTest(){
+  public void pwdTest() {
     executor.inputCommand("mkdir a1");
     executor.inputCommand("mkdir a2");
     executor.inputCommand("mkdir a3");

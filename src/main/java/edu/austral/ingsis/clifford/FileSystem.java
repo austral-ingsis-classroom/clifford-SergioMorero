@@ -9,79 +9,76 @@ public class FileSystem {
   private final Directory root = new Directory("/", null);
   private Directory current = root;
 
-  public String ls(String[] parsedCommand){
+  public String ls(String[] parsedCommand) {
     return current.ls(parsedCommand);
   }
 
-  public String cd(String[] parsedCommand){
-    if (parsedCommand.length > 1){
+  public String cd(String[] parsedCommand) {
+    if (parsedCommand.length > 1) {
       String parameter = parsedCommand[1];
-      switch (parameter){
-        case ".":{
-          break;
-        }
-        case "..":{
-          if (this.current.getParent() != null){
-            this.current = this.current.getParent();
+      switch (parameter) {
+        case ".":
+          {
+            break;
           }
-          break;
-        }
-        default:{
-          // Directorio sin ruta
-          if (parameter.charAt(0) != '/'){
-            Directory destination = null;
-            // Busca si el directorio se encuentra dentro del directorio actual
-            for (Directory dir: this.current.getDirectories()){
-              if (dir.getName().equals(parameter)){
-                destination = dir;
-              }
+        case "..":
+          {
+            if (this.current.getParent() != null) {
+              this.current = this.current.getParent();
             }
-
-            if (destination == null){
-              // Busca si el nombre es un archivo en vez de un directorio
-              for (File file: this.current.getFiles()){
-                if (file.getName().equals(parameter)){
-                  return "The name given is a file, not a directory";
+            break;
+          }
+        default:
+          {
+            // Directorio sin ruta
+            if (parameter.charAt(0) != '/') {
+              Directory destination = null;
+              // Busca si el directorio se encuentra dentro del directorio actual
+              for (Directory dir : this.current.getDirectories()) {
+                if (dir.getName().equals(parameter)) {
+                  destination = dir;
                 }
               }
-              return "Directory not found";
+
+              if (destination == null) {
+                // Busca si el nombre es un archivo en vez de un directorio
+                for (File file : this.current.getFiles()) {
+                  if (file.getName().equals(parameter)) {
+                    return "The name given is a file, not a directory";
+                  }
+                }
+                return "Directory not found";
+              } else {
+                this.current = destination;
+              }
+
             }
+            // Directorio con ruta
             else {
-              this.current = destination;
-            }
-
-          }
-          // Directorio con ruta
-          else {
-            this.current = this.root;
-            String[] route = parameter.split("/");
-            Directory result = recursiveCd(route, 0);
-            if (result != null){
-              this.current = result;
-              return "Moved to directory '" + result.getName() + "'";
-            }
-            else {
-              return "Route " + parameter + " does not exist";
+              this.current = this.root;
+              String[] route = parameter.split("/");
+              Directory result = recursiveCd(route, 0);
+              if (result != null) {
+                this.current = result;
+                return "Moved to directory '" + result.getName() + "'";
+              } else {
+                return "Route " + parameter + " does not exist";
+              }
             }
           }
-
-        }
-
       }
       return "Moved to directory: '" + this.current.getName() + "'";
-    }
-    else {
+    } else {
       return "You must specify the directory of destination";
     }
   }
 
-  private Directory recursiveCd(String[] route, int index){
-    for (Directory dir: this.current.getDirectories()){
-      if (dir.getName().equals(route[index])){
-        if (index == route.length - 1){
+  private Directory recursiveCd(String[] route, int index) {
+    for (Directory dir : this.current.getDirectories()) {
+      if (dir.getName().equals(route[index])) {
+        if (index == route.length - 1) {
           return dir;
-        }
-        else {
+        } else {
           this.current = dir;
           recursiveCd(route, index + 1);
         }
@@ -90,58 +87,51 @@ public class FileSystem {
     return null;
   }
 
-  public String touch(String[] parsedCommand){
-    if (parsedCommand.length > 1){
-      if (parsedCommand.length == 2){
+  public String touch(String[] parsedCommand) {
+    if (parsedCommand.length > 1) {
+      if (parsedCommand.length == 2) {
         return this.current.touch(parsedCommand[1]);
-      }
-      else{
+      } else {
         return "File name cannot include spaces";
       }
-    }
-    else {
+    } else {
       return "No file name provided";
     }
   }
 
-  public String mkdir(String[] parsedCommand){
-    if (parsedCommand.length > 1){
-      if (parsedCommand.length == 2){
+  public String mkdir(String[] parsedCommand) {
+    if (parsedCommand.length > 1) {
+      if (parsedCommand.length == 2) {
         return this.current.mkdir(parsedCommand[1]);
-      }
-      else {
+      } else {
         return "Directory name cannot include spaces";
       }
-    }
-    else {
+    } else {
       return "No directory name provided";
     }
   }
 
-  public String rm(String[] parsedCommand){
-    if (parsedCommand.length > 1){
+  public String rm(String[] parsedCommand) {
+    if (parsedCommand.length > 1) {
       return this.current.rm(parsedCommand);
-    }
-    else {
+    } else {
       return "No file name provided";
     }
   }
 
-  public String pwd(){
+  public String pwd() {
     List<String> list = new ArrayList<>();
     List<String> path = recursivePwd(this.current, list);
     Collections.reverse(path);
     return "/" + String.join("/", path);
   }
 
-  private List<String> recursivePwd(Directory current, List<String> result){
-    if (current.getName().equals("/")){
+  private List<String> recursivePwd(Directory current, List<String> result) {
+    if (current.getName().equals("/")) {
       return result;
-    }
-    else {
+    } else {
       result.add(current.getName());
       return recursivePwd(current.getParent(), result);
     }
   }
-
 }
