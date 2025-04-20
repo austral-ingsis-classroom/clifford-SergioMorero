@@ -8,6 +8,7 @@ public class Directory {
   private final Directory parent;
   private List<Directory> directories = new ArrayList<Directory>();
   private List<File> files = new ArrayList<File>();
+  private List<String> all = new ArrayList<>();
 
   public Directory(String name, Directory parent) {
     this.name = name;
@@ -16,11 +17,12 @@ public class Directory {
 
   public String ls(String[] parsedCommand) {
     List<String> result = new ArrayList<>();
-    for (File file : files) {
-      result.add(file.getName());
+    // Collections.reverse(result);
+    for (Directory dir : this.directories) {
+      result.add(dir.getName());
     }
-    for (Directory dir : directories) {
-      result.add(dir.getName() + "/");
+    for (File file : this.files) {
+      result.add(file.getName());
     }
     if (parsedCommand.length > 1) {
       switch (parsedCommand[1]) {
@@ -42,6 +44,7 @@ public class Directory {
       }
     }
     this.files.add(new File(fileName));
+    this.all.add(fileName);
     return "'" + fileName + "' file created";
   }
 
@@ -53,6 +56,7 @@ public class Directory {
       }
     }
     this.directories.add(new Directory(dirName, this));
+    this.all.add(dirName);
     return "'" + dirName + "' directory created";
   }
 
@@ -63,6 +67,7 @@ public class Directory {
         for (Directory dir : this.directories) {
           if (dir.getName().equals(name)) {
             this.directories.remove(dir);
+            this.all.remove(name);
             return "'" + name + "' removed";
           }
         }
@@ -75,10 +80,11 @@ public class Directory {
       for (File file : this.files) {
         if (file.getName().equals(name)) {
           this.files.remove(file);
+          this.all.remove(name);
           return "'" + name + "' removed";
         }
       }
-      return "File: '" + name + "' does not exist in this directory";
+      return "cannot remove '" + name + "', is a directory";
     }
   }
 

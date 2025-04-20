@@ -30,44 +30,55 @@ public class FileSystem {
           }
         default:
           {
-            // Directorio sin ruta
-            if (parameter.charAt(0) != '/') {
-              Directory destination = null;
-              // Busca si el directorio se encuentra dentro del directorio actual
-              for (Directory dir : this.current.getDirectories()) {
-                if (dir.getName().equals(parameter)) {
-                  destination = dir;
-                }
-              }
-
-              if (destination == null) {
-                // Busca si el nombre es un archivo en vez de un directorio
-                for (File file : this.current.getFiles()) {
-                  if (file.getName().equals(parameter)) {
-                    return "The name given is a file, not a directory";
-                  }
-                }
-                return "Directory not found";
-              } else {
-                this.current = destination;
-              }
-
-            }
-            // Directorio con ruta
-            else {
+            if (parameter.charAt(0) == '/') {
               this.current = this.root;
               String[] route = parameter.split("/");
+              if (route.length == 0) {
+                return "moved to directory '/'";
+              }
               Directory result = recursiveCd(route, 0);
               if (result != null) {
                 this.current = result;
-                return "Moved to directory '" + result.getName() + "'";
+                return "moved to directory '" + result.getName() + "'";
               } else {
                 return "Route " + parameter + " does not exist";
+              }
+            } else {
+              String[] route = parameter.split("/");
+              if (route.length == 1) {
+                Directory destination = null;
+                // Busca si el directorio se encuentra dentro del directorio actual
+                for (Directory dir : this.current.getDirectories()) {
+                  if (dir.getName().equals(parameter)) {
+                    destination = dir;
+                  }
+                }
+
+                if (destination == null) {
+                  // Busca si el nombre es un archivo en vez de un directorio
+                  for (File file : this.current.getFiles()) {
+                    if (file.getName().equals(parameter)) {
+                      return "The name given is a file, not a directory";
+                    }
+                  }
+                  return "'" + parameter + "' directory does not exist";
+                } else {
+                  this.current = destination;
+                }
+              } else {
+                // Directorio con ruta
+                Directory result = recursiveCd(route, 0);
+                if (result != null) {
+                  this.current = result;
+                  return "moved to directory '" + result.getName() + "'";
+                } else {
+                  return "Route " + parameter + " does not exist";
+                }
               }
             }
           }
       }
-      return "Moved to directory: '" + this.current.getName() + "'";
+      return "moved to directory '" + this.current.getName() + "'";
     } else {
       return "You must specify the directory of destination";
     }
@@ -80,7 +91,7 @@ public class FileSystem {
           return dir;
         } else {
           this.current = dir;
-          recursiveCd(route, index + 1);
+          return recursiveCd(route, index + 1);
         }
       }
     }

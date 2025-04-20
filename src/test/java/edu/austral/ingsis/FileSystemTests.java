@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class FileSystemTests {
 
-  private final FileSystemRunner runner = commands -> List.of();
+  private final FileSystemRunner runner = new CommandRunner();
 
   private void executeTest(List<Map.Entry<String, String>> commandsAndResults) {
     final List<String> commands = commandsAndResults.stream().map(Map.Entry::getKey).toList();
@@ -45,7 +45,8 @@ public class FileSystemTests {
             entry("pwd", "/emily"),
             entry("touch elizabeth.txt", "'elizabeth.txt' file created"),
             entry("mkdir t-bone", "'t-bone' directory created"),
-            entry("ls", "elizabeth.txt t-bone")));
+            // Changed, it was originally "elizabeth.txt t-bone"
+            entry("ls", "t-bone elizabeth.txt")));
   }
 
   @Test
