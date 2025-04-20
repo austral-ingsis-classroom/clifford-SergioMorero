@@ -1,5 +1,6 @@
 package edu.austral.ingsis.clifford;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandExecutor {
@@ -7,7 +8,12 @@ public class CommandExecutor {
   private final FileSystem fileSystem = new FileSystem();
 
   public List<String> executeCommands(List<String> commands) {
-    return null;
+    List<String> results = new ArrayList<>();
+    for (String command : commands) {
+      String result = inputCommand(command);
+      results.add(result);
+    }
+    return results;
   }
 
   public String inputCommand(String input) {
