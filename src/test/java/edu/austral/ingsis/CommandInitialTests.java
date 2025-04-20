@@ -27,11 +27,11 @@ public class CommandInitialTests {
   public void createDirectoryTest() {
     Assertions.assertEquals(executor.inputCommand("mkdir saludos"), "'saludos' directory created");
     executor.inputCommand("touch hola.txt");
-    Assertions.assertEquals(executor.inputCommand("ls --ord=asc"), "hola.txt saludos/");
-    Assertions.assertEquals(executor.inputCommand("ls --ord=desc"), "saludos/ hola.txt");
-    Assertions.assertEquals(executor.inputCommand("cd saludos"), "Moved to directory: 'saludos'");
+    Assertions.assertEquals(executor.inputCommand("ls --ord=asc"), "hola.txt saludos");
+    Assertions.assertEquals(executor.inputCommand("ls --ord=desc"), "saludos hola.txt");
+    Assertions.assertEquals(executor.inputCommand("cd saludos"), "moved to directory 'saludos'");
     Assertions.assertEquals(executor.inputCommand("ls"), "");
-    Assertions.assertEquals(executor.inputCommand("cd .."), "Moved to directory: '/'");
+    Assertions.assertEquals(executor.inputCommand("cd .."), "moved to directory '/'");
   }
 
   @Test
@@ -42,7 +42,7 @@ public class CommandInitialTests {
     executor.inputCommand("cd saludo");
     executor.inputCommand("touch aaa.txt");
     Assertions.assertEquals(
-        executor.inputCommand("rm aa.txt"), "File: 'aa.txt' does not exist in this directory");
+        executor.inputCommand("rm aa.txt"), "cannot remove 'aa.txt', is a directory");
     Assertions.assertEquals(executor.inputCommand("rm aaa.txt"), "'aaa.txt' removed");
     Assertions.assertEquals(executor.inputCommand("ls"), "");
     executor.inputCommand("cd ..");
